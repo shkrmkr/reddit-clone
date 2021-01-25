@@ -1,21 +1,16 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+
+import { BaseContent } from '../base-content.entity';
+import { Post } from '../post/post.entity';
 
 @Entity('users')
-export class User {
+export class User extends BaseContent {
   constructor(params: Partial<User>) {
+    super();
     Object.keys((key: string) => {
       this[key] = params[key];
     });
   }
-
-  @PrimaryGeneratedColumn()
-  id: number;
 
   @Column({ unique: true })
   username: string;
@@ -26,9 +21,6 @@ export class User {
   @Column()
   password: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 }

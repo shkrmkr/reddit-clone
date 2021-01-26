@@ -2,6 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 import { BaseContent } from '../base-content.entity';
 import { User } from '../user/user.entity';
+import { Sub } from '../sub/sub.entity';
 
 @Entity('posts')
 export class Post extends BaseContent {
@@ -25,4 +26,8 @@ export class Post extends BaseContent {
   @ManyToOne(() => User, (user) => user.posts, { nullable: false })
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   user: User;
+
+  @ManyToOne(() => Sub)
+  @JoinColumn({ name: 'subName', referencedColumnName: 'name' })
+  sub: Sub;
 }

@@ -56,12 +56,10 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await this.userService.create({
+    return await this.userService.create({
       ...registerUserDto,
       password: hashedPassword,
     });
-
-    return newUser;
   }
 
   async validateUser(email: string, password: string): Promise<User> {

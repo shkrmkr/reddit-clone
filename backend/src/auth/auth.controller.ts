@@ -46,7 +46,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @UseGuards(LocalAuthGuard)
-  async login(@Req() req: RequestWithUser) {
+  login(@Req() req: RequestWithUser) {
     const { user } = req;
 
     const token = this.authService.generateToken({
@@ -67,7 +67,7 @@ export class AuthController {
 
   @Get('logout')
   @UseGuards(JwtAuthGuard)
-  async logout(@Req() req: Request) {
+  logout(@Req() req: Request) {
     req.res.cookie('Authentication', '', { maxAge: 0 }).send();
   }
 

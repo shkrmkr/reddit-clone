@@ -62,11 +62,11 @@ export class AuthService {
     });
   }
 
-  async validateUser(email: string, password: string): Promise<User> {
-    const user = await this.userService.findOneByEmail(email);
+  async validateUser(username: string, password: string): Promise<User> {
+    const user = await this.userService.findOneByUsername(username);
 
     if (!user) {
-      throw new BadRequestException('Incorrect email or password');
+      throw new BadRequestException('Incorrect username or password');
     }
 
     await this.validatePassword(password, user.password);

@@ -1,6 +1,20 @@
+# dependencies
+node_modules/
+
 # compiled output
 dist/
-node_modules/
+build/
+
+
+# testing
+coverage/
+
+# next.js
+.next/
+out/
+
+# vercel
+.vercel
 
 # Logs
 logs
@@ -25,4 +39,9 @@ coverage/
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# env files
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

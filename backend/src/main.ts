@@ -1,12 +1,20 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
+import { ConfigService } from '@nestjs/config';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 import { ValidationError } from 'class-validator';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+
   app.use(cookieParser());
+  app.enableCors({
+    credentials: true,
+    origin: configService.get('ORIGIN'),
+    optionsSuccessStatus: 200,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -23,6 +31,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  await app.listen(configService.get('PORT'));
 }
 bootstrap();

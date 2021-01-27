@@ -7,6 +7,8 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+
+import { CreateCommentDto } from '../comment/dto/create-comment.dto';
 import { RequestWithUser } from '../auth/interface/request-with-user.interface';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -36,5 +38,21 @@ export class PostController {
     @Param('slug') slug: string,
   ) {
     return this.postService.read(identifier, slug);
+  }
+
+  @PostRoute(':identifier/:slug/comments')
+  @UseGuards(JwtAuthGuard)
+  createComment(
+    @Body() createCommentDto: CreateCommentDto,
+    @Req() req: RequestWithUser,
+    @Param('identifier') identifier: string,
+    @Param('slug') slug: string,
+  ) {
+    return this.postService.createComment(
+      createCommentDto,
+      identifier,
+      slug,
+      req.user,
+    );
   }
 }

@@ -1,8 +1,16 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 import { BaseContent } from '../base-content.entity';
 import { User } from '../user/user.entity';
 import { Sub } from '../sub/sub.entity';
+import { Comment } from '../comment/comment.entity';
 
 @Entity('posts')
 export class Post extends BaseContent {
@@ -30,4 +38,7 @@ export class Post extends BaseContent {
   @ManyToOne(() => Sub)
   @JoinColumn({ name: 'subName', referencedColumnName: 'name' })
   sub: Sub;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 }

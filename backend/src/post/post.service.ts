@@ -1,18 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UtilService } from 'src/util/util.service';
 import { Repository } from 'typeorm';
 
+import { Comment } from '../comment/comment.entity';
+import { UtilService } from '../util/util.service';
 import { Sub } from '../sub/sub.entity';
 import { User } from '../user/user.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post } from './post.entity';
+import { CreateCommentDto } from 'src/comment/dto/create-comment.dto';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(Post) private postRepository: Repository<Post>,
     @InjectRepository(Sub) private subRepository: Repository<Sub>,
+    @InjectRepository(Comment) private commentRepository: Repository<Comment>,
     private utilService: UtilService,
   ) {}
 
@@ -35,8 +38,7 @@ export class PostService {
       user,
       sub,
     });
-    await this.postRepository.save(post);
-    return post;
+    return this.postRepository.save(post);
   }
 
   readAll(): Promise<Post[]> {
@@ -44,12 +46,39 @@ export class PostService {
   }
 
   async read(identifier: string, slug: string): Promise<Post> {
-    const post = await this.postRepository.findOne({ identifier, slug });
+    const post = await this.postRepository.findOne(
+      { identifier, slug },
+      { relations: ['sub'] },
+    );
 
     if (!post) {
       throw new NotFoundException('Post not found');
     }
 
     return post;
+  }
+
+  async createComment(
+    createCommentDto: CreateCommentDto,
+    identifier: string,
+    slug: string,
+    user: User,
+  ): Promise<Comment> {
+    const post = await this.postRepository.findOne({ identifier, slug });
+
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    const commentIdentifier = this.utilService.getIdentifier(8);
+
+    const comment = await this.commentRepository.create({
+      ...createCommentDto,
+      identifier: commentIdentifier,
+      post,
+      user,
+    });
+
+    return this.commentRepository.save(comment);
   }
 }

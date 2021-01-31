@@ -1,4 +1,13 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { Exclude, Expose } from 'class-transformer';
+import { CommentVote } from 'src/vote/comment-vote.entity';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 import { BaseContent } from '../base-content.entity';
 import { Post } from '../post/post.entity';
@@ -22,4 +31,19 @@ export class Comment extends BaseContent {
 
   @ManyToOne(() => Post, (post) => post.comments, { nullable: false })
   post: Post;
+
+  @Exclude()
+  @OneToMany(() => CommentVote, (vote) => vote.comment)
+  votes: CommentVote[];
+
+  @Expose()
+  get voteScore(): number {
+    return this.votes?.reduce((acc, cur) => acc + cur.value, 0) || 0;
+  }
+
+  protected userVote: number;
+  setUserVote(user: User) {
+    const vote = this.votes?.find((vote) => vote.username === user.username);
+    this.userVote = vote?.value || 0;
+  }
 }

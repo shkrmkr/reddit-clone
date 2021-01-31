@@ -42,13 +42,16 @@ export class PostService {
   }
 
   readAll(): Promise<Post[]> {
-    return this.postRepository.find({ order: { createdAt: 'DESC' } });
+    return this.postRepository.find({
+      order: { createdAt: 'DESC' },
+      relations: ['votes', 'comments'],
+    });
   }
 
   async read(identifier: string, slug: string): Promise<Post> {
     const post = await this.postRepository.findOne(
       { identifier, slug },
-      { relations: ['sub'] },
+      { relations: ['sub', 'votes', 'comments'] },
     );
 
     if (!post) {

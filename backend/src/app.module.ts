@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PostModule } from './post/post.module';
 import { SubModule } from './sub/sub.module';
+import { VoteModule } from './vote/vote.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SubModule } from './sub/sub.module';
     AuthModule,
     PostModule,
     SubModule,
+    VoteModule,
   ],
   controllers: [],
   providers: [],

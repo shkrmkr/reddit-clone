@@ -1,11 +1,13 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Param,
   Post as PostRoute,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { CreateCommentDto } from '../comment/dto/create-comment.dto';
@@ -15,6 +17,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
 
 @Controller('posts')
+@UseInterceptors(ClassSerializerInterceptor)
 export class PostController {
   constructor(private postService: PostService) {}
 

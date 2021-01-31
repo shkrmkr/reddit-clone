@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "../images/logo.svg";
 import RedditTextLogo from "../images/reddit.svg";
-import SearchIcon from "../images/search.svg";
+import { FaSearch } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
 
       <div className="flex items-center mx-auto bg-gray-100 border rounded hover:bg-white hover:border-blue-500">
         <div className="pl-4 pr-3">
-          <SearchIcon className="text-gray-500 fill-current" />
+          <FaSearch className="text-gray-400" />
         </div>
         <input
           type="text"

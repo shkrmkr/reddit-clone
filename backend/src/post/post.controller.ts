@@ -15,6 +15,7 @@ import { RequestWithUser } from '../auth/interface/request-with-user.interface';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('posts')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -31,8 +32,9 @@ export class PostController {
   }
 
   @Get()
-  getAllPosts() {
-    return this.postService.readAll();
+  @UseGuards(AuthGuard(['jwt', 'anonymous']))
+  getAllPosts(@Req() req: RequestWithUser) {
+    return this.postService.readAll(req.user);
   }
 
   @Get(':identifier/:slug')

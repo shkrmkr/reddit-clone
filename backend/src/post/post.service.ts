@@ -41,11 +41,19 @@ export class PostService {
     return this.postRepository.save(post);
   }
 
-  readAll(): Promise<Post[]> {
-    return this.postRepository.find({
+  async readAll(user: User): Promise<Post[]> {
+    const posts = await this.postRepository.find({
       order: { createdAt: 'DESC' },
       relations: ['votes', 'comments'],
     });
+
+    console.log(user);
+
+    if (user.username) {
+      posts.forEach((post) => post.setUserVote(user));
+    }
+
+    return posts;
   }
 
   async read(identifier: string, slug: string): Promise<Post> {

@@ -9,4 +9,14 @@ export interface Post {
   title: string;
   url: string;
   username: string;
+  voteScore?: number;
+  commentCount?: number;
+  userVote?: number;
+}
+
+export interface User {
+  username: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
 }

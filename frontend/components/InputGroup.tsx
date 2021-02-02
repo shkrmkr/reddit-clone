@@ -11,7 +11,7 @@ interface Props {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputGroup: React.FC<Props> = ({
+export default function InputGroup({
   className,
   type,
   name,
@@ -19,7 +19,7 @@ const InputGroup: React.FC<Props> = ({
   value,
   error,
   onChange,
-}) => {
+}: Props) {
   return (
     <div className={className}>
       <input
@@ -36,6 +36,4 @@ const InputGroup: React.FC<Props> = ({
       <small className="font-medium text-red-600">{error}</small>
     </div>
   );
-};
-
-export default InputGroup;
+}

@@ -1,9 +1,32 @@
 import Link from "next/link";
-import Logo from "../images/logo.svg";
-import RedditTextLogo from "../images/reddit.svg";
+import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 
-const Navbar: React.FC = () => {
+import Logo from "../images/logo.svg";
+import RedditTextLogo from "../images/reddit.svg";
+import {
+  logout,
+  stopLoading,
+  useAuthDispatch,
+  useAuthState,
+} from "../contexts/auth";
+
+export default function Navbar() {
+  const { authenticated, loading } = useAuthState();
+  const dispatch = useAuthDispatch();
+
+  const handleLogout = async () => {
+    try {
+      await axios.get("/auth/logout");
+      dispatch(logout());
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(stopLoading());
+    }
+    window.location.reload();
+  };
+
   return (
     <div className="fixed inset-x-0 top-0 z-10 flex items-center justify-center h-12 px-4 bg-white">
       <Link href="/">
@@ -25,15 +48,25 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="flex">
-        <Link href="/login">
-          <a className="w-32 py-1 mr-4 outlined blue button">log in</a>
-        </Link>
-        <Link href="/register">
-          <a className="w-32 py-1 blue button">sign up</a>
-        </Link>
+        {!loading &&
+          (authenticated ? (
+            <button
+              onClick={handleLogout}
+              className="w-32 py-1 mr-4 outlined blue button"
+            >
+              log out
+            </button>
+          ) : (
+            <>
+              <Link href="/login">
+                <a className="w-32 py-1 mr-4 outlined blue button">log in</a>
+              </Link>
+              <Link href="/register">
+                <a className="w-32 py-1 blue button">sign up</a>
+              </Link>
+            </>
+          ))}
       </div>
     </div>
   );
-};
-
-export default Navbar;
+}

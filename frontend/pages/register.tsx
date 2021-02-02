@@ -3,7 +3,9 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
+
 import InputGroup from "../components/InputGroup";
+import { useAuthState } from "../contexts/auth";
 
 export default function Register() {
   const [formFields, setFormFields] = useState({
@@ -13,6 +15,11 @@ export default function Register() {
   });
   const [errors, setErrors] = useState<any>({});
   const router = useRouter();
+  const { authenticated } = useAuthState();
+
+  if (authenticated) {
+    router.push("/");
+  }
 
   const handlInputFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormFields((prevFormState) => ({

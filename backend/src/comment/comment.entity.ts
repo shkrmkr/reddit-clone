@@ -1,5 +1,4 @@
 import { Exclude, Expose } from 'class-transformer';
-import { CommentVote } from 'src/vote/comment-vote.entity';
 import {
   Column,
   Entity,
@@ -9,6 +8,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { CommentVote } from '../vote/comment-vote.entity';
 import { BaseContent } from '../base-content.entity';
 import { Post } from '../post/post.entity';
 import { User } from '../user/user.entity';

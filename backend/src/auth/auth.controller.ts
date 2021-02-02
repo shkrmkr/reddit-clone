@@ -1,11 +1,13 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpCode,
   Post,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
@@ -18,6 +20,7 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -54,15 +57,15 @@ export class AuthController {
       username: user.username,
     });
 
-    req.res
-      .cookie('Authentication', token, {
-        httpOnly: true,
-        path: '/',
-        // TODO: (DEPLOY) SSL 적용 후 `secure: true`로 변경 (또는 environment에 따라 true 또는 false를 반환하는 코드 작성)
-        secure: false,
-        maxAge: this.configService.get('JWT_EXPIRES_IN') * 1000,
-      })
-      .send();
+    req.res.cookie('Authentication', token, {
+      httpOnly: true,
+      path: '/',
+      // TODO: (DEPLOY) SSL 적용 후 `secure: true`로 변경 (또는 environment에 따라 true 또는 false를 반환하는 코드 작성)
+      secure: false,
+      maxAge: this.configService.get('JWT_EXPIRES_IN') * 1000,
+    });
+
+    return user;
   }
 
   @Get('logout')

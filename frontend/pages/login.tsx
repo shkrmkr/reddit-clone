@@ -3,7 +3,14 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import axios from "axios";
+
 import InputGroup from "../components/InputGroup";
+import {
+  login,
+  stopLoading,
+  useAuthDispatch,
+  useAuthState,
+} from "../contexts/auth";
 
 export default function Login() {
   const [formFields, setFormFields] = useState({
@@ -12,6 +19,12 @@ export default function Login() {
   });
   const [errors, setErrors] = useState<any>({});
   const router = useRouter();
+  const dispatch = useAuthDispatch();
+  const { authenticated } = useAuthState();
+
+  if (authenticated) {
+    router.push("/");
+  }
 
   const handlInputFieldChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormFields((prevFormState) => ({
@@ -24,10 +37,13 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      await axios.post("/auth/login", formFields);
+      const { data: user } = await axios.post("/auth/login", formFields);
+      dispatch(login(user));
       router.push("/");
     } catch (error) {
       setErrors(error.response.data);
+    } finally {
+      dispatch(stopLoading());
     }
   };
 

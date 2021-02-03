@@ -4,10 +4,10 @@ import { GoBookmark, GoArrowUp, GoArrowDown } from "react-icons/go";
 import cn from "classnames";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import axios from "axios";
 
 import { Post } from "../types";
 import ActionButton from "./ActionButton";
-import axios from "axios";
 
 dayjs.extend(relativeTime);
 
@@ -57,15 +57,15 @@ export default function PostCard({ post }: Props) {
       <div className="w-full p-2">
         <div className="flex items-center">
           <Link href={`/r/${post.subName}`}>
-            <>
-              <img
-                src="https://gravatar.com/avatar"
-                className="w-6 h-6 mr-1 rounded-full cursor-pointer"
-              />
-              <a className="text-xs font-bold cursor-pointer hover:underline">
-                /r/{post.subName}
-              </a>
-            </>
+            <img
+              src="https://gravatar.com/avatar"
+              className="w-6 h-6 mr-1 rounded-full cursor-pointer"
+            />
+          </Link>
+          <Link href={`/r/${post.subName}`}>
+            <a className="text-xs font-bold cursor-pointer hover:underline">
+              /r/{post.subName}
+            </a>
           </Link>
           <p className="text-xs text-gray-500">
             <span className="mx-1">•</span>Posted by

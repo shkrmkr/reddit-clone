@@ -47,8 +47,6 @@ export class PostService {
       relations: ['votes', 'comments'],
     });
 
-    console.log(user);
-
     if (user.username) {
       posts.forEach((post) => post.setUserVote(user));
     }
